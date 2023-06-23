@@ -1,0 +1,7 @@
+{
+  "type": "mongodb",
+  "url": "mongodb://localhost:27017/streamers",
+  "useUnifiedTopology": true,
+  "entities": ["dist/**/*.entity{.ts,.js}"],
+  "synchronize": true
+}
