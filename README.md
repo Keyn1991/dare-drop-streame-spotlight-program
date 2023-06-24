@@ -16,7 +16,7 @@ $ cd dare-drop-streame-spotlight-program
 ```bash
 $ cd backend
 ```
-## Installation
+## Installation and run applications
 
 ```bash
 $ npm install
