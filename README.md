@@ -18,6 +18,8 @@ $ cd backend
 ```
 ## Installation and run applications
 
+#Backend
+
 ```bash
 $ npm install
 ```
@@ -27,6 +29,7 @@ $ npm run start:dev
 ```bash
 $ cd..
 ```
+#Frontend
 
 ```bash
 $ cd frontend 
