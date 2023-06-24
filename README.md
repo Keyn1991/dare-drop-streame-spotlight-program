@@ -11,6 +11,9 @@ Poject launch instructions:
 $ git clone https://github.com/Keyn1991/dare-drop-streame-spotlight-program
 ```
 ```bash
+$ cd dare-drop-streame-spotlight-program
+```
+```bash
 $ cd backend
 ```
 ## Installation
