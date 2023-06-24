@@ -1,17 +1,27 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
+import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty } from 'class-validator';
 
 @Schema()
 export class Streamer {
+  @ApiProperty({ example: 'John Doe', description: 'The name of the streamer' })
   @Prop()
   @IsNotEmpty()
   name: string;
 
+  @ApiProperty({
+    example: 'Twitch',
+    description: 'The platform where the streamer streams',
+  })
   @Prop()
   @IsNotEmpty()
   platform: string;
 
+  @ApiProperty({
+    example: 'I am a professional gamer',
+    description: 'Description of the streamer',
+  })
   @Prop()
   @IsNotEmpty()
   description: string;

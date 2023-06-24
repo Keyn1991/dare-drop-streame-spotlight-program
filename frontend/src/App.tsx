@@ -1,15 +1,22 @@
 import React from 'react';
-
+import {Route, Routes} from 'react-router-dom';
 import './App.css';
-import StreamerForm from "./Components/StreamerForm/StreamerForm";
-import StreamerList from "./Components/StreamerList/StreamerList";
+
+import HomePage from "./pages/homePage/homePage";
+import StreamerDetailsPage from "./pages/StreamerDetailsPage/StreamerDetailsPage";
+import Header from "./Components/Header/Header";
+import Footer from "./Components/Footer/Footer";
+
 
 const App = () => (
     <div className="App">
         <div>
-            <h1>Streamer Spotlight</h1>
-            <StreamerForm />
-            <StreamerList />
+            <Header/>
+            <Routes>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/streamer/:id" element={<StreamerDetailsPage />} />
+            </Routes>
+            <Footer/>
         </div>
     </div>
 );

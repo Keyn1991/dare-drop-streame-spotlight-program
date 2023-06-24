@@ -1,38 +1,38 @@
 import React, {useEffect, useState} from 'react';
-import axios from 'axios';
-import {Container} from "@mui/material";
-import Button from "@mui/material/Button";
+import {useNavigate} from 'react-router-dom';
 
-interface Streamer {
-    id: number;
-    name: string;
-    platform: string;
-    description: string;
-    upvotes: number;
-    downvotes: number;
-}
+import {Container, Grid} from '@mui/material';
+import {Streamer} from '../../interface/interface';
+import Pagination from "../Pagination/Pagination";
+import StreamerCard from "../StreamerCard/StreamerCard";
+import {downvoteStreamer, fetchStreamers, upvoteStreamer} from "../../service/apiService";
 
 const StreamerList: React.FC = () => {
     const [streamers, setStreamers] = useState<Streamer[]>([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+    const navigate = useNavigate();
 
-    useEffect(() => {
-        axios
-            .get('http://localhost:5000/streamers')
+    const loadStreamers = (page: number) => {
+        fetchStreamers(page, 24)
             .then((response) => {
                 setStreamers(response.data);
+                setTotalPages(4); // Замініть 10 на правильну кількість сторінок, якщо відома.
             })
-            .catch((error) => {
+            .catch((error: string) => {
                 console.error(error);
             });
-    }, []);
+    };
 
-    const handleUpvote = (id: number) => {
-        axios
-            .put(`http://localhost:5000/streamers/${id}/upvote`)
+    useEffect(() => {
+        loadStreamers(currentPage);
+        navigate(`?page=${currentPage}`); // Змінюємо URL залежно від стану currentPage
+    }, [currentPage, navigate]);
+
+    const handleUpvote = (id: string) => {
+        upvoteStreamer(id)
             .then((response) => {
-                const updatedStreamers = streamers.map((streamer) =>
-                    streamer.id === id ? response.data : streamer
-                );
+                const updatedStreamers = streamers.map((streamer) => (streamer.id === id ? response.data : streamer));
                 setStreamers(updatedStreamers);
             })
             .catch((error) => {
@@ -40,34 +40,39 @@ const StreamerList: React.FC = () => {
             });
     };
 
-    const handleDownvote = (id: number) => {
-        axios
-            .put(`http://localhost:5000/streamers/${id}/downvote`)
+    const handleDownvote = (id: string) => {
+        downvoteStreamer(id)
             .then((response) => {
-                const updatedStreamers = streamers.map((streamer) =>
-                    streamer.id === id ? response.data : streamer
-                );
+                const updatedStreamers = streamers.map((streamer) => (streamer.id === id ? response.data : streamer));
                 setStreamers(updatedStreamers);
             })
             .catch((error) => {
                 console.error(error);
             });
+    };
+
+    const handlePrevPage = () => {
+        if (currentPage > 1) {
+            setCurrentPage(currentPage - 1);
+        }
+    };
+
+    const handleNextPage = () => {
+        if (currentPage < totalPages) {
+            setCurrentPage(currentPage + 1);
+        }
     };
 
     return (
         <Container>
-            {streamers.map((streamer) => (
-                <li key={streamer.id}>
-                    <h3>{streamer.name}</h3>
-                    <p>{streamer.platform}</p>
-                    <p>{streamer.description}</p>
-                    <Button variant="contained" onClick={() => handleUpvote(streamer.id)}>Upvote</Button>
-
-                    <span>Upvotes: {streamer.upvotes}</span>
-                    <Button variant="contained" onClick={() => handleDownvote(streamer.id)}>Downvote</Button>
-                    <span>Downvotes: {streamer.downvotes}</span>
-                </li>
-            ))}
+            <Grid container spacing={2}>
+                {streamers.map((streamer) => (
+                    <Grid item xs={12} sm={6} md={4} key={streamer.id}>
+                        <StreamerCard streamer={streamer} handleUpvote={handleUpvote} handleDownvote={handleDownvote} />
+                    </Grid>
+                ))}
+            </Grid>
+            <Pagination currentPage={currentPage} totalPages={totalPages} handlePrevPage={handlePrevPage} handleNextPage={handleNextPage} />
         </Container>
     );
 };
