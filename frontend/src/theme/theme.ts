@@ -1,7 +1,7 @@
-import {createMuiTheme} from "@mui/material";
+import {createTheme} from "@mui/material";
 
 
-const theme = createMuiTheme({
+const theme = createTheme ({
     palette: {
         primary: {
             main: '#003399',
